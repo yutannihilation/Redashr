@@ -2,4 +2,6 @@
 #'
 #' @name RedashMySQL
 #' @docType package
+#' @import DBI
+#' @import methods
 NULL
