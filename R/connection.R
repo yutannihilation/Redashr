@@ -26,3 +26,8 @@ setClass("RedashConnection",
 setMethod("dbConnect", "RedashDriver", function(drv, ...) {
   new("RedashConnection", ...)
 })
+
+#' @export
+setMethod("dbDisconnect", "RedashConnection", function(conn, ...) {
+  TRUE
+})
