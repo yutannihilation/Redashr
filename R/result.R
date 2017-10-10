@@ -1,28 +1,33 @@
-#' Result for 'Redash' 'MySQL' Database
+#' Result for 'Redash' Database
 #'
 #' @keywords internal
 #' @export
-setClass("RedashMySQLResult",
-         contains = "MySQLResult",
+setClass("RedashResult",
+         contains = "DBIResult",
          slots = list(ptr = "externalptr")
 )
 
 #' @export
-setMethod("dbSendQuery", "RedashMySQLConnection", function(conn, statement, ...) {
-  new("RedashMySQLResult", ...)
+setMethod("dbSendQuery", "RedashConnection", function(conn, statement, ...) {
+  new("RedashResult", ...)
 })
 
 #' @export
-setMethod("dbClearResult", "RedashMySQLConnection", function(res, ...) {
+setMethod("dbClearResult", "RedashConnection", function(res, ...) {
   TRUE
 })
 
 #' @export
-setMethod("dbFetch", "RedashMySQLResult", function(res, n = -1, ...) {
+setMethod("dbFetch", "RedashResult", function(res, n = -1, ...) {
   TRUE
 })
 
 #' @export
-setMethod("dbHasCompleted", "RedashMySQLResult", function(res, ...) {
+setMethod("dbDataType", "RedashConnection", function(dbObj, obj, ...) {
+  TRUE
+})
+
+#' @export
+setMethod("dbHasCompleted", "RedashResult", function(res, ...) {
   TRUE
 })

@@ -1,11 +1,11 @@
-Package: RedashMySQL
+Package: Redashr
 Type: Package
-Title: Database Interface and 'MySQL' Driver via 'Redash'
+Title: Database Interface for 'Redash'
 Version: 0.0.0.9000
 Author@R: c(
   person("Hiroaki", "Yutani", email = "yutani.ini@gmail.com", role = c("aut", "cre"))
   )
-Description: A 'DBI' interface to 'MySQL' behind 'Redash'
+Description: A 'DBI' interface to 'Redash'.
 Depends:
   R (>= 3.1.0)
 Imports:

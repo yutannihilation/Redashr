@@ -1,10 +1,10 @@
-#' Connection for 'Redash' 'MySQL' Database
+#' Connection for 'Redash' Database
 #'
 #' @name connection
 #' @export
 #' @keywords internal
-setClass("RedashMySQLConnection",
-         contains = "MySQLConnection",
+setClass("RedashConnection",
+         contains = "DBIConnection",
          slots = list(
            host = "character",
            username = "character",
@@ -14,16 +14,15 @@ setClass("RedashMySQLConnection",
 )
 
 
-#' @param drv An object created by `RedashMySQL`
+#' @param drv An object created by `Redash`
 #' @rdname connection
 #' @export
 #' @examples
 #' \dontrun{
-#' db <- dbConnect(RedashMySQL::RedashMySQL())
+#' db <- dbConnect(Redashr::Redash())
 #' dbWriteTable(db, "mtcars", mtcars)
 #' dbGetQuery(db, "SELECT * FROM mtcars WHERE cyl == 4")
 #' }
-setMethod("dbConnect", "RedashMySQLDriver", function(drv, ...) {
-
-  new("RedashMySQLConnection", host = host, ...)
+setMethod("dbConnect", "RedashDriver", function(drv, ...) {
+  new("RedashConnection", ...)
 })

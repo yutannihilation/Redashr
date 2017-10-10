@@ -1,21 +1,21 @@
-#' Driver for 'Redash' 'MySQL' Database
+#' Driver for 'Redash' Database
 #'
 #' @name driver
 #' @keywords internal
 #' @export
-setClass("RedashMySQLDriver", contains = "DBIDriver")
+setClass("RedashDriver", contains = "DBIDriver")
 
 #' @export
 #' @rdname driver
-setMethod("dbUnloadDriver", "RedashMySQLDriver", function(drv, ...) {
+setMethod("dbUnloadDriver", "RedashDriver", function(drv, ...) {
   TRUE
 })
 
-setMethod("show", "RedashMySQLDriver", function(object) {
-  cat("<RedashMySQLDriver>\n")
+setMethod("show", "RedashDriver", function(object) {
+  cat("<RedashDriver>\n")
 })
 
 #' @export
-RedashMySQL <- function() {
-  new("RedashMySQLDriver")
+Redash <- function() {
+  new("RedashDriver")
 }

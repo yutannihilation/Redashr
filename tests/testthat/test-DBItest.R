@@ -1,3 +1,3 @@
-DBItest::make_context(RedashMySQL(), NULL)
+DBItest::make_context(Redash(), NULL)
 DBItest::test_getting_started()
 DBItest::test_driver()

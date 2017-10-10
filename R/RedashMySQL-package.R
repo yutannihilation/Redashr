@@ -4,5 +4,4 @@
 #' @docType package
 #' @import DBI
 #' @import methods
-#' @import RMySQL
 NULL

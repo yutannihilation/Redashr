@@ -3,20 +3,20 @@
 \docType{class}
 \name{connection}
 \alias{connection}
-\alias{dbConnect,RedashMySQLDriver-method}
-\title{Connection for 'Redash' 'MySQL' Database}
+\alias{dbConnect,RedashDriver-method}
+\title{Connection for 'Redash' Database}
 \usage{
-\S4method{dbConnect}{RedashMySQLDriver}(drv, ...)
+\S4method{dbConnect}{RedashDriver}(drv, ...)
 }
 \arguments{
-\item{drv}{An object created by \code{RedashMySQL}}
+\item{drv}{An object created by \code{Redash}}
 }
 \description{
-Connection for 'Redash' 'MySQL' Database
+Connection for 'Redash' Database
 }
 \examples{
 \dontrun{
-db <- dbConnect(RedashMySQL::RedashMySQL())
+db <- dbConnect(Redashr::Redash())
 dbWriteTable(db, "mtcars", mtcars)
 dbGetQuery(db, "SELECT * FROM mtcars WHERE cyl == 4")
 }

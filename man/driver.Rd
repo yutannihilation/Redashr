@@ -3,12 +3,12 @@
 \docType{class}
 \name{driver}
 \alias{driver}
-\alias{dbUnloadDriver,RedashMySQLDriver-method}
-\title{Driver for 'Redash' 'MySQL' Database}
+\alias{dbUnloadDriver,RedashDriver-method}
+\title{Driver for 'Redash' Database}
 \usage{
-\S4method{dbUnloadDriver}{RedashMySQLDriver}(drv, ...)
+\S4method{dbUnloadDriver}{RedashDriver}(drv, ...)
 }
 \description{
-Driver for 'Redash' 'MySQL' Database
+Driver for 'Redash' Database
 }
 \keyword{internal}
