@@ -1,0 +1,23 @@
+Package: RedashMySQL
+Type: Package
+Title: Database Interface and 'MySQL' Driver via 'Redash'
+Version: 0.0.0.9000
+Author@R: c(
+  person("Hiroaki", "Yutani", email = "yutani.ini@gmail.com", role = c("aut", "cre"))
+  )
+Description: A 'DBI' interface to 'MySQL' behind 'Redash'
+Depends:
+  R (>= 3.1.0)
+Imports:
+  DBI (>= 0.3.0),
+  methods,
+  RMySQL,
+  httr
+Suggests:
+  DBItest,
+  testthat
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1.9000
+Roxygen: list(markdown = TRUE)
+License: MIT + file LICENSE
