@@ -25,3 +25,4 @@ Collate:
   'RedashMySQL-package.R'
   'driver.R'
   'connection.R'
+  'result.R'
