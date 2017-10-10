@@ -1,4 +1,4 @@
 library(testthat)
-library(RedashMySQL)
+library(Redashr)
 
-test_check("RedashMySQL")
+test_check("Redashr")
