@@ -24,7 +24,18 @@ setMethod("dbFetch", "RedashResult", function(res, n = -1, ...) {
 
 #' @export
 setMethod("dbDataType", "RedashConnection", function(dbObj, obj, ...) {
-  TRUE
+  dbDataType(RMariaDB::MariaDB(), obj, ...)
+})
+
+#' @export
+setMethod("dbDataType", "RedashDriver", function(dbObj, obj, ...) {
+  dbDataType(RMariaDB::MariaDB(), obj, ...)
+})
+
+
+#' @export
+setMethod("dbDataType", "RedashConnection", function(dbObj, obj, ...) {
+  dbDataType(RMariaDB::MariaDB(), obj, ...)
 })
 
 #' @export

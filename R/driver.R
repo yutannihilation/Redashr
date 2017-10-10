@@ -19,3 +19,8 @@ setMethod("show", "RedashDriver", function(object) {
 Redash <- function() {
   new("RedashDriver")
 }
+
+#' @export
+setMethod("dbGetInfo", "RedashDriver", function(dbObj) {
+  list(driver.version = NULL, client.version = NULL)
+})

@@ -31,3 +31,6 @@ setMethod("dbConnect", "RedashDriver", function(drv, ...) {
 setMethod("dbDisconnect", "RedashConnection", function(conn, ...) {
   TRUE
 })
+
+
+
