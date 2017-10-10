@@ -2,7 +2,7 @@ Package: Redashr
 Type: Package
 Title: Database Interface for 'Redash'
 Version: 0.0.0.9000
-Author@R: c(
+Authors@R: c(
   person("Hiroaki", "Yutani", email = "yutani.ini@gmail.com", role = c("aut", "cre"))
   )
 Description: A 'DBI' interface to 'Redash'.
@@ -11,7 +11,7 @@ Depends:
 Imports:
   DBI (>= 0.3.0),
   methods,
-  RMySQL,
+  RMariaDB,
   httr
 Suggests:
   DBItest,
@@ -22,7 +22,7 @@ RoxygenNote: 6.0.1.9000
 Roxygen: list(markdown = TRUE)
 License: MIT + file LICENSE
 Collate:
-  'RedashMySQL-package.R'
+  'Redashr-package.R'
   'driver.R'
   'connection.R'
   'result.R'
