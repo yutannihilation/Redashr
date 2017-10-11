@@ -27,3 +27,4 @@ Collate:
   'driver.R'
   'connection.R'
   'result.R'
+  'util.R'

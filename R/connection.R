@@ -6,10 +6,9 @@
 setClass("RedashConnection",
          contains = "DBIConnection",
          slots = list(
-           host = "character",
-           username = "character",
+           base_url = "character",
            api_key = "character",
-           ptr = "externalptr"
+           data_source_id = "integer"
          )
 )
 
@@ -23,8 +22,31 @@ setClass("RedashConnection",
 #' dbWriteTable(db, "mtcars", mtcars)
 #' dbGetQuery(db, "SELECT * FROM mtcars WHERE cyl == 4")
 #' }
-setMethod("dbConnect", "RedashDriver", function(drv, ...) {
-  new("RedashConnection", ...)
+setMethod("dbConnect", "RedashDriver",
+          function(drv,
+                   base_url = "http://localhost",
+                   api_key = "",
+                   dsn = 1L,
+                   ...) {
+  if (is.numeric(dsn)) {
+    data_source_id <- as.integer(dsn)
+  } else {
+    # TODO: normalize host
+    data_sources <- get_data_sources(base_url, api_key)
+    data_source <- data_sources[[dsn]]
+
+    if (is.null(data_source)) {
+      stop(glue::glue("No such data source: {dsn}"))
+    }
+
+    data_source_id <- data_source[["id"]]
+  }
+
+  new("RedashConnection",
+      base_url = base_url,
+      api_key  = api_key,
+      data_source_id = data_source_id,
+      ...)
 })
 
 #' @export

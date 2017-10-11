@@ -6,7 +6,8 @@
 \alias{dbConnect,RedashDriver-method}
 \title{Connection for 'Redash' Database}
 \usage{
-\S4method{dbConnect}{RedashDriver}(drv, ...)
+\S4method{dbConnect}{RedashDriver}(drv, base_url = "http://localhost",
+  api_key = "", dsn = 1L, ...)
 }
 \arguments{
 \item{drv}{An object created by \code{Redash}}
