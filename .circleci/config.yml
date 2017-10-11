@@ -45,6 +45,9 @@ defaults: &defaults
      - run:
          command: mv ${RCHECK_DIR} /tmp/Rcheck
          when: always
+     - run:
+         command: curl http://localhost/ > /tmp/Rcheck/curl-result.txt
+         when: always
      - store_artifacts:
          path: /tmp/Rcheck
          when: always
