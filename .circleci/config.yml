@@ -15,7 +15,12 @@ defaults: &defaults
          cd redash-2.0.0
          docker-compose -f docker-compose.production.yml run --rm server create_db
          docker-compose -f docker-compose.production.yml up -d
-         while true; do if wget -s http://localhost/; break; fi; sleep 10; done
+         while true; do
+           if wget http://localhost/; then
+             break
+           fi
+           sleep 10
+         done
 
      ## setup -------------------------------
 
