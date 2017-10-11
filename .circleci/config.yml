@@ -23,7 +23,7 @@ defaults: &defaults
      - run: R CMD check "${PKG_TARBALL}" --as-cran --no-manual
      - run: Rscript -e "message(devtools::check_failures(path = '${RCHECK_DIR}'))"
      # warnings are errors
-     - run: grep -q -R "WARNING" "${RCHECK_DIR}/00check.log" && exit 1
+     - run: if ! grep -q -R "WARNING" "${RCHECK_DIR}/00check.log"; then exit 1; fi
 
      ## store artifacts -----------------
 
