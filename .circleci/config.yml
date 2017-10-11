@@ -61,12 +61,12 @@ defaults: &defaults
 version: 2
 jobs:
    "r-release":
-     docker:
+     machine:
        - image: rocker/tidyverse:latest
      <<: *defaults
 
    "r-devel":
-     docker:
+     machine:
        - image: rocker/tidyverse:devel
      <<: *defaults
 
