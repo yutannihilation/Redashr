@@ -1,6 +1,6 @@
 # Redashr
 
-[![Travis-CI Build Status](https://travis-ci.org/yutannihilation/Redashr.svg?branch=master)](https://travis-ci.org/yutannihilation/Redashr)
+[![CircleCI](https://circleci.com/gh/yutannihilation/Redashr.svg?style=svg)](https://circleci.com/gh/yutannihilation/Redashr)
 
 ## Installation
 
