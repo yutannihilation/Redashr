@@ -38,10 +38,10 @@ setMethod("dbSendQuery", "RedashConnection",
         stop("No result or job ID returned!")
       }
 
-      message(glue::glue("Fetching job {job_id}...\n"))
-
       while (TRUE) {
-        query_result_id_raw <- try_get_query_result_id(conn@base_url, conn@api_key, job_id)
+        message(glue::glue("Fetching the result of job {job_id}...\n"))
+
+        query_result_id <- try_get_query_result_id(conn@base_url, conn@api_key, job_id)
 
         if (!is.null(query_result_id)) break
 
