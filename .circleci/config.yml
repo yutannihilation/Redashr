@@ -1,6 +1,7 @@
 defaults: &defaults
   steps:
-     # setup
+     ## setup -------------------------------
+
      - checkout
      - run:
          name: Set environmental variables
@@ -11,12 +12,19 @@ defaults: &defaults
              -e 'cat(sprintf("export RCHECK_DIR=%s.Rcheck\n", dsc[,"Package"]))' \
              >> ${BASH_ENV}
 
-     # build and test
+     ## install dependencies ------------------
+
+     - run: Rscript -e 'if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")'
+     - run: Rscript -e 'devtools::install_deps(dependencies = TRUE)'
+
+     ## build and test -----------------
+
      - run: R CMD build .
      - run: R CMD check "${PKG_TARBALL}" --as-cran --no-manual
      - run: Rscript -e "message(devtools::check_failures(path = '${RCHECK_DIR}'))"
 
-     # store artifacts
+     ## store artifacts -----------------
+
      - run:
          command: mv ${RCHECK_DIR} /tmp/Rcheck
          when: always
