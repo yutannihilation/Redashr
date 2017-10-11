@@ -3,8 +3,7 @@
 #' @name driver
 #' @keywords internal
 #' @export
-setClass("RedashDriver", contains = "DBIDriver",
-         slots = list(backend_driver = "DBIDriver"))
+setClass("RedashDriver", contains = "DBIDriver")
 
 #' @export
 #' @rdname driver
@@ -13,13 +12,12 @@ setMethod("dbUnloadDriver", "RedashDriver", function(drv, ...) {
 })
 
 setMethod("show", "RedashDriver", function(object) {
-  backend <- as.character(class(d@backend_driver))
-  cat(glue::glue("<RedashDriver (backend: {backend})>\n"))
+  cat(glue::glue("<RedashDriver>\n"))
 })
 
 #' @export
-Redash <- function(backend_driver = RPostgreSQL::PostgreSQL()) {
-  new("RedashDriver", backend_driver = backend_driver)
+Redash <- function() {
+  new("RedashDriver")
 }
 
 #' @export

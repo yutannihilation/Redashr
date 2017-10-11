@@ -8,7 +8,8 @@ setClass("RedashConnection",
          slots = list(
            base_url = "character",
            api_key = "character",
-           data_source_id = "integer"
+           data_source_id = "integer",
+           data_source_driver = "DBIDriver"
          )
 )
 
@@ -26,26 +27,31 @@ setMethod("dbConnect", "RedashDriver",
           function(drv,
                    base_url = "http://localhost",
                    api_key = "",
-                   dsn = 1L,
+                   data_source_name = "",
                    ...) {
-  if (is.numeric(dsn)) {
-    data_source_id <- as.integer(dsn)
-  } else {
-    # TODO: normalize host
-    data_sources <- get_data_sources(base_url, api_key)
-    data_source <- data_sources[[dsn]]
 
-    if (is.null(data_source)) {
-      stop(glue::glue("No such data source: {dsn}"))
-    }
+  # TODO: normalize host
+  data_sources <- get_data_sources(base_url, api_key)
+  data_source <- data_sources[[data_source_name]]
 
-    data_source_id <- data_source[["id"]]
+  if (is.null(data_source)) {
+    stop(glue::glue("No such data source: {data_source_name}"))
   }
+
+  data_source_id <- data_source$id
+
+  # TODO: support more backends
+  data_source_driver <- switch(
+    data_source$type,
+    "pg" = RPostgreSQL::PostgreSQL(),
+    RPostgreSQL::PostgreSQL()
+  )
 
   new("RedashConnection",
       base_url = base_url,
       api_key  = api_key,
       data_source_id = data_source_id,
+      data_source_driver = data_source_driver,
       ...)
 })
 
