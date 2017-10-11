@@ -28,15 +28,24 @@ setMethod("dbConnect", "RedashDriver",
           function(drv,
                    base_url = "http://localhost",
                    api_key = "",
-                   data_source_name = "",
+                   data_source_name = NULL,
                    ...) {
 
   # TODO: normalize host
   data_sources <- get_data_sources(base_url, api_key)
-  data_source <- data_sources[[data_source_name]]
-
-  if (is.null(data_source)) {
-    stop(glue::glue("No such data source: {data_source_name}"))
+  if (is.null(data_source_name)) {
+    if (length(data_sources) == 1L) {
+      data_source <- data_sources[[1]]
+      warning(glue::glue("Using {data_source$id} as data source for now, but please provide data_source_name."),
+              call. = FALSE)
+    } else {
+      stop("Please provide data_source_name.")
+    }
+  } else {
+    data_source <- data_sources[[data_source_name]]
+    if (is.null(data_source)) {
+      stop(glue::glue("No such data source: {data_source_name}"))
+    }
   }
 
   data_source_id <- data_source$id
@@ -61,7 +70,7 @@ setMethod("dbConnect", "RedashDriver",
 })
 
 #' @export
-redash_connect <- function(base_url, api_key, data_source_name) {
+redash_connect <- function(base_url, api_key, data_source_name = NULL) {
   drv <- Redash()
   dbConnect(drv, base_url, api_key, data_source_name)
 }
