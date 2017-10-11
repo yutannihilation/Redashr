@@ -26,3 +26,16 @@ dbi_res <- dbSendQuery(conn, "Select * from iris limit 10;")
 
 dbFetch(dbi_res)
 ```
+
+Or, you can use this via dplyr (SQL translation is not implemented yet):
+
+``` r
+library(dbplyr)
+library(dplyr)
+
+redash_iris <- tbl(conn, "iris")
+redash_iris %>% 
+  select(sepallength, petallength, name) %>%
+  filter(name == "Iris-setosa") %>%
+  collect()
+```
