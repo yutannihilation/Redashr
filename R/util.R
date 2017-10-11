@@ -20,3 +20,34 @@ get_data_sources <- function(base_url, api_key, ...) {
   # result contains NULL, which makes bind_rows() to fail
   setNames(result, purrr::map_chr(result, "name"))
 }
+
+post_query <- function(base_url, api_key, query, query_id, data_source_id, ...) {
+  url <- glue::glue("{base_url}/api/query_results")
+
+  redash_request(
+    "POST", url, api_key,
+    body = list(
+      query = query,
+      query_id = query_id,
+      data_source_id = data_source_id
+    ),
+    encode = "json",
+    ...
+  )
+}
+
+try_get_query_result_id <- function(base_url, api_key, job_id, ...) {
+  url <- glue::glue("{base_url}/api/jobs/{job_id}")
+  result <- redash_request("GET", url, api_key, ...)
+
+  if (!identical(result$job$error, "")) stop(glue::glue("Error: {result$error}"))
+
+  if (result$job$status %in% c(3L, 4L)) return(result$job$query_result_id)
+
+  return(NULL)
+}
+
+get_result <- function(base_url, api_key, query_id, query_result_id, ...) {
+  url <- glue::glue("{base_url}/api/queries/{query_id}/results/{query_result_id}.csv")
+  redash_request("GET", url, api_key, ...)
+}

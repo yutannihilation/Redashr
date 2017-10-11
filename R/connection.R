@@ -9,7 +9,8 @@ setClass("RedashConnection",
            base_url = "character",
            api_key = "character",
            data_source_id = "integer",
-           data_source_driver = "DBIDriver"
+           data_source_driver = "DBIDriver",
+           ref = "environment"
          )
 )
 
@@ -47,17 +48,28 @@ setMethod("dbConnect", "RedashDriver",
     RPostgreSQL::PostgreSQL()
   )
 
+  ref_env <- new.env(parent = emptyenv())
+  ref_env$query_id <- 0L
+
   new("RedashConnection",
       base_url = base_url,
       api_key  = api_key,
       data_source_id = data_source_id,
       data_source_driver = data_source_driver,
+      ref = ref_env,
       ...)
+})
+
+setGeneric("query_id", function(x) standardGeneric("query_id"))
+
+setMethod("query_id", "RedashConnection", function(x) {
+  x@ref$query_id <- x@ref$query_id + 1L
+  x@ref$query_id
 })
 
 #' @export
 setMethod("dbDisconnect", "RedashConnection", function(conn, ...) {
-  TRUE
+  invisible(TRUE)
 })
 
 
