@@ -49,8 +49,8 @@ jobs:
          environment:
            PYTHONUNBUFFERED: 0
            REDASH_LOG_LEVEL: "INFO"
-           REDASH_REDIS_URL: "redis://redis:6379/0"
-           REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
+           REDASH_REDIS_URL: "redis://localhost:6379/0"
+           REDASH_DATABASE_URL: "postgresql://postgres@localhost/postgres"
            REDASH_COOKIE_SECRET: veryverysecret
            REDASH_WEB_WORKERS: 4
 
@@ -59,8 +59,8 @@ jobs:
          environment:
            PYTHONUNBUFFERED: 0
            REDASH_LOG_LEVEL: "INFO"
-           REDASH_REDIS_URL: "redis://redis:6379/0"
-           REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
+           REDASH_REDIS_URL: "redis://localhost:6379/0"
+           REDASH_DATABASE_URL: "postgresql://postgres@localhost/postgres"
            QUEUES: "queries,scheduled_queries,celery"
            WORKERS_COUNT: 2
 
