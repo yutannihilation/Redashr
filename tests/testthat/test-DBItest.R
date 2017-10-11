@@ -2,6 +2,9 @@ tweaks <- DBItest::tweaks(
   # Though "RRedash" is possible, I chose "Redash" because this seems more natural.
   constructor_name = "Redash",
 
+  # Redash needs to be specified its backend.
+  constructor_relax_args = TRUE,
+
   # Redash probably cannot work well with BLOBs.
   omit_blob_tests = TRUE
 )

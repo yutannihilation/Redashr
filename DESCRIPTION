@@ -10,9 +10,10 @@ Depends:
   R (>= 3.1.0)
 Imports:
   DBI (>= 0.3.0),
+  glue,
+  httr,
   methods,
-  RMariaDB,
-  httr
+  RPostgreSQL
 Suggests:
   DBItest,
   testthat
