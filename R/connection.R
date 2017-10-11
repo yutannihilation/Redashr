@@ -60,6 +60,12 @@ setMethod("dbConnect", "RedashDriver",
       ...)
 })
 
+#' @export
+redash_connect <- function(base_url, api_key, data_source_name) {
+  drv <- Redash()
+  dbConnect(drv, base_url, api_key, data_source_name)
+}
+
 setGeneric("query_id", function(x) standardGeneric("query_id"))
 
 setMethod("query_id", "RedashConnection", function(x) {
@@ -73,4 +79,11 @@ setMethod("dbDisconnect", "RedashConnection", function(conn, ...) {
 })
 
 
-
+#' @export
+setMethod("dbListTables", "RedashConnection", function(conn, ...) {
+  # TODO: support multiple backend
+  dbGetQuery(conn, paste0(
+    "SELECT tablename FROM pg_tables WHERE schemaname !='information_schema'",
+    " AND schemaname !='pg_catalog'")
+  )[[1]]
+})

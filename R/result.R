@@ -38,6 +38,8 @@ setMethod("dbSendQuery", "RedashConnection",
         stop("No result or job ID returned!")
       }
 
+      message(glue::glue("Fetching job {job_id}...\n"))
+
       while (TRUE) {
         query_result_id_raw <- try_get_query_result_id(conn@base_url, conn@api_key, job_id)
 
@@ -82,5 +84,11 @@ setMethod("dbDataType", "RedashConnection", function(dbObj, obj, ...) {
 
 #' @export
 setMethod("dbHasCompleted", "RedashResult", function(res, ...) {
+  TRUE
+})
+
+#' @export
+setMethod("dbClearResult", "RedashResult", function(res, ...) {
+  res@conn@ref$result <- NULL
   TRUE
 })
