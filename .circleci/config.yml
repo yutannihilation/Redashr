@@ -11,7 +11,7 @@ defaults: &defaults
            chmod +x /usr/local/bin/docker-compose
      - setup_remote_docker
      - run: mkdir redash
-     - run: get -O - https://github.com/getredash/redash/archive/v2.0.0.tar.gz | tar -xzf - -C redash
+     - run: wget -O - https://github.com/getredash/redash/archive/v2.0.0.tar.gz | tar -xzf - -C redash
      - run: (cd redash; docker-compose -f docker-compose.production.yml run --rm server create_db)
 
      ## setup -------------------------------
