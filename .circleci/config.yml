@@ -39,6 +39,32 @@ jobs:
    "r-release":
      docker:
        - image: rocker/tidyverse:latest
+
+       - image: redash/redash:latest
+         entrypoint: server
+         environment:
+           PYTHONUNBUFFERED: 0
+           REDASH_LOG_LEVEL: "INFO"
+           REDASH_REDIS_URL: "redis://redis:6379/0"
+           REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
+           REDASH_COOKIE_SECRET: veryverysecret
+           REDASH_WEB_WORKERS: 4
+
+       - image: redash/redash:latest
+         entrypoint: scheduler
+         environment:
+           PYTHONUNBUFFERED: 0
+           REDASH_LOG_LEVEL: "INFO"
+           REDASH_REDIS_URL: "redis://redis:6379/0"
+           REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
+           QUEUES: "queries,scheduled_queries,celery"
+           WORKERS_COUNT: 2
+
+       - image: redis:3.0-alpine
+
+       - image: postgres:9.5.6-alpine
+
+       - image: redash/nginx:latest
      <<: *defaults
 
    "r-devel":
@@ -51,4 +77,4 @@ workflows:
   build_and_test:
     jobs:
       - "r-release"
-      - "r-devel"
+      # - "r-devel"
