@@ -1,5 +1,15 @@
 defaults: &defaults
   steps:
+     - run:
+         name: wait for redash to come up
+         command: |
+           while true; do
+             if wget -O - http://localhost:5000; then
+               break
+             fi
+             sleep 10
+           done
+
      ## setup -------------------------------
 
      - checkout
@@ -64,7 +74,6 @@ jobs:
            QUEUES: "queries,scheduled_queries,celery"
            WORKERS_COUNT: 2
 
-       - image: redash/nginx:latest
      <<: *defaults
 
    "r-devel":
