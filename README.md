@@ -12,3 +12,17 @@ You can install Redashr from github with:
 devtools::install_github("yutannihilation/Redashr")
 ```
 
+## Usage
+
+``` r
+library(Redashr)
+
+api_key <- "xxxxxxxxxx"
+redash_url <- "http://localhost"
+
+drv <- Redash()
+conn <- dbConnect(drv, base_url = redash_url, api_key = api_key, data_source_name = "pg")
+dbi_res <- dbSendQuery(conn, "Select * from iris limit 10;")
+
+dbFetch(dbi_res)
+```
