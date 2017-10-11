@@ -41,7 +41,7 @@ jobs:
        - image: rocker/tidyverse:latest
 
        - image: redash/redash:latest
-         entrypoint: server
+         command: [server]
          environment:
            PYTHONUNBUFFERED: 0
            REDASH_LOG_LEVEL: "INFO"
@@ -51,7 +51,7 @@ jobs:
            REDASH_WEB_WORKERS: 4
 
        - image: redash/redash:latest
-         entrypoint: scheduler
+         command: [scheduler]
          environment:
            PYTHONUNBUFFERED: 0
            REDASH_LOG_LEVEL: "INFO"
