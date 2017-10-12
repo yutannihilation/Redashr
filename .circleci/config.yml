@@ -1,11 +1,19 @@
 defaults: &defaults
   steps:
      - run:
+       name: install dockerize
+       command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+       environment:
+         DOCKERIZE_VERSION: v0.3.0
+     - run:
+         name: Wait for db
+         command: dockerize -wait tcp://localhost:5432 -timeout 1m
+     - run:
          name: Install PostgreSQL CLI
          command: apt-get install -y postgresql-client
      - run:
          command: |
-           env PGPASSWORD=postgres psql -U postgres --dbname postgres -c "CRATE DATABASE test;",
+           env PGPASSWORD=postgres psql -U postgres --dbname postgres -c "CRATE DATABASE test;"
            zcat .circleci/pg_dump.sql.gz | env PGPASSWORD=postgres psql -U postgres --dbname postgres
 
      ## setup -------------------------------
