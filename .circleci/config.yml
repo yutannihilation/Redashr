@@ -13,8 +13,8 @@ defaults: &defaults
          command: apt-get install -y postgresql-client
      - run:
          command: |
-           env PGPASSWORD=postgres psql -U postgres --dbname postgres -c "CRATE DATABASE test;"
-           zcat .circleci/pg_dump.sql.gz | env PGPASSWORD=postgres psql -U postgres --dbname postgres
+           env PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres --dbname postgres -c "CRATE DATABASE test;"
+           zcat .circleci/pg_dump.sql.gz | env PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres --dbname postgres
 
      ## setup -------------------------------
 
