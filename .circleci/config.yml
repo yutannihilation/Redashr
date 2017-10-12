@@ -2,6 +2,8 @@ defaults: &defaults
   steps:
      - checkout
 
+     ## insert dummy data -----------------------------------
+
      - run:
          name: Install PostgreSQL CLI
          command: apt-get install -y postgresql-client
