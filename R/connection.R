@@ -36,7 +36,7 @@ setMethod("dbConnect", "RedashDriver",
   if (is.null(data_source_name)) {
     if (length(data_sources) == 1L) {
       data_source <- data_sources[[1]]
-      warning(glue::glue("Using {data_source$id} as data source for now, but please provide data_source_name."),
+      warning(glue::glue("Using {data_source$name} as data source for now, but please provide data_source_name."),
               call. = FALSE)
     } else {
       stop("Please provide data_source_name.")
