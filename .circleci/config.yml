@@ -1,5 +1,13 @@
 defaults: &defaults
   steps:
+     - run:
+         name: Install PostgreSQL CLI
+         command: apt install -y postgresql-client-common
+     - run:
+         command: |
+           env PGPASSWORD=postgres psql -U postgres --dbname postgres -c "CRATE DATABASE test;"
+           zcat .circleci/pg_dump.sql.gz | env PGPASSWORD=postgres psql -U postgres --dbname postgres
+
      ## setup -------------------------------
 
      - checkout
