@@ -132,19 +132,11 @@ setMethod("dbWriteTable", "RedashConnection",
 
 
 #' @export
-setMethod("dbBegin", "RedashConnection", function(conn, ...) {
-  invisible(TRUE)
-})
-
+db_begin.RedashConnection <- function(con, ...) NULL
 #' @export
-setMethod("dbCommit", "RedashConnection", function(conn, ...) {
-  invisible(TRUE)
-})
-
+db_commit.RedashConnection <- function(con, ...) NULL
 #' @export
-setMethod("dbRollback", "RedashConnection", function(conn, ...) {
-  invisible(TRUE)
-})
+db_rollback.RedashConnection <- function(con, ...) NULL
 
 prepare_connection_class <- function(package, class) {
   if (require(package, character.only = TRUE)) return(class)
