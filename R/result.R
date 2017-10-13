@@ -7,6 +7,7 @@ setClass("RedashResult",
          slots = list(
            query = "character",
            query_id = "integer",
+           no_result = "logical",
            query_result_id = "character",
            conn = "RedashConnection"
          )
@@ -41,9 +42,10 @@ setMethod("dbSendQuery", "RedashConnection",
       while (TRUE) {
         message(glue::glue("Fetching the result of job {job_id}...\n"))
 
-        query_result_id <- try_get_query_result_id(conn@base_url, conn@api_key, job_id)
+        job <- get_job_status(conn@base_url, conn@api_key, job_id)
 
-        if (!is.null(query_result_id)) break
+        # 3: completed, 4: completed w/o data?
+        if (job$status %in% c(3L, 4L)) break
 
         Sys.sleep(3L)
       }
@@ -52,6 +54,7 @@ setMethod("dbSendQuery", "RedashConnection",
     new("RedashResult",
         query = statement,
         query_id = query_id,
+        no_result = (job$status == 4L),
         query_result_id = as.character(query_result_id),
         conn = conn)
 })
@@ -63,6 +66,9 @@ setMethod("dbClearResult", "RedashConnection", function(res, ...) {
 
 #' @export
 setMethod("dbFetch", "RedashResult", function(res, n = -1, ...) {
+  if (res@no_result) {
+    return(data.frame())
+  }
   get_result(res@conn@base_url, res@conn@api_key, res@query_id, res@query_result_id)
 })
 
@@ -74,12 +80,6 @@ setMethod("dbDataType", "RedashConnection", function(dbObj, obj, ...) {
 #' @export
 setMethod("dbDataType", "RedashDriver", function(dbObj, obj, ...) {
   dbDataType(RPostgreSQL::PostgreSQL(), obj, ...)
-})
-
-
-#' @export
-setMethod("dbDataType", "RedashConnection", function(dbObj, obj, ...) {
-  dbDataType(RMariaDB::MariaDB(), obj, ...)
 })
 
 #' @export

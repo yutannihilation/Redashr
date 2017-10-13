@@ -36,18 +36,16 @@ post_query <- function(base_url, api_key, query, query_id, data_source_id, ...) 
   )
 }
 
-try_get_query_result_id <- function(base_url, api_key, job_id, ...) {
+get_job_status <- function(base_url, api_key, job_id, ...) {
   url <- glue::glue("{base_url}/api/jobs/{job_id}")
   result <- redash_request("GET", url, api_key, ...)
 
   job_error <- result$job$error
-  if (!identical(job_error, "")) {
+  if (result$job$state != 4L && !identical(job_error, "")) {
     stop(glue::glue("Query failed: {job_error}", call. = FALSE))
   }
 
-  if (result$job$status %in% c(3L, 4L)) return(result$job$query_result_id)
-
-  return(NULL)
+  result$job
 }
 
 get_result <- function(base_url, api_key, query_id, query_result_id, ...) {
