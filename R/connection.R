@@ -9,7 +9,7 @@ setClass("RedashConnection",
            base_url = "character",
            api_key = "character",
            data_source_id = "integer",
-           data_source_driver = "DBIDriver",
+           backend_connection_class = "character",
            ref = "environment"
          )
 )
@@ -51,10 +51,14 @@ setMethod("dbConnect", "RedashDriver",
   data_source_id <- data_source$id
 
   # TODO: support more backends
-  data_source_driver <- switch(
+  backend_connection_class <- switch(
     data_source$type,
-    "pg" = RPostgreSQL::PostgreSQL(),
-    RPostgreSQL::PostgreSQL()
+    "pg" = "PostgreSQLConnection",
+    "redshift" = "PostgreSQLConnection",
+    "mysql" = "MySQLConnection",
+    "rds_mysql" = "MySQLConnection",
+    "presto" = "PrestoConnection",
+    stop("Not supported backend")
   )
 
   ref_env <- new.env(parent = emptyenv())
@@ -64,7 +68,7 @@ setMethod("dbConnect", "RedashDriver",
       base_url = base_url,
       api_key  = api_key,
       data_source_id = data_source_id,
-      data_source_driver = data_source_driver,
+      backend_connection_class = backend_connection_class,
       ref = ref_env,
       ...)
 })
@@ -95,4 +99,41 @@ setMethod("dbListTables", "RedashConnection", function(conn, ...) {
     "SELECT tablename FROM pg_tables WHERE schemaname !='information_schema'",
     " AND schemaname !='pg_catalog'")
   )[[1]]
+})
+
+#' @export
+setMethod("sqlCreateTable", "RedashConnection",
+  function(con, table, fields, row.names = NA, temporary = FALSE, ...) {
+    sqlCreateTable(new(con@backend_connection_class), table, fields, row.names, temporary, ...)
+  }
+)
+
+#' @export
+setMethod("sqlAppendTable", "RedashConnection",
+  function(con, table, values, row.names = NA, ...) {
+    sqlAppendTable(new(con@backend_connection_class), table, values, row.names, ...)
+  }
+)
+
+#' @export
+setMethod("sqlData", "RedashConnection",
+  function(con, table, values, row.names = NA, ...) {
+    sqlData(new(con@backend_connection_class), values, row.names, ...)
+  }
+)
+
+
+#' @export
+setMethod("dbBegin", "RedashConnection", function(conn, ...) {
+  invisible(TRUE)
+})
+
+#' @export
+setMethod("dbCommit", "RedashConnection", function(conn, ...) {
+  invisible(TRUE)
+})
+
+#' @export
+setMethod("dbRollback", "RedashConnection", function(conn, ...) {
+  invisible(TRUE)
 })

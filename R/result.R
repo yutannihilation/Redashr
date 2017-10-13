@@ -79,12 +79,13 @@ setMethod("dbFetch", "RedashResult", function(res, n = -1, ...) {
 
 #' @export
 setMethod("dbDataType", "RedashConnection", function(dbObj, obj, ...) {
-  dbDataType(RPostgreSQL::PostgreSQL(), obj, ...)
+  dbDataType(new(dbObj@backend_connection_class), obj, ...)
 })
 
 #' @export
 setMethod("dbDataType", "RedashDriver", function(dbObj, obj, ...) {
-  dbDataType(RPostgreSQL::PostgreSQL(), obj, ...)
+  # TODO: Driver doesn't know the backend...
+  dbDataType(DBI::ANSI(), obj, ...)
 })
 
 #' @export
