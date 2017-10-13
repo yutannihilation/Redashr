@@ -30,6 +30,7 @@ setMethod("dbSendQuery", "RedashConnection",
                          data_source_id = conn@data_source_id)
 
     query_result_id <- result$query_result$id
+    no_result <- FALSE
 
     # Wait until the query execution finish
     if (is.null(query_result_id)) {
@@ -44,8 +45,12 @@ setMethod("dbSendQuery", "RedashConnection",
 
         job <- get_job_status(conn@base_url, conn@api_key, job_id)
 
-        # 3: completed, 4: completed w/o data?
-        if (job$status %in% c(3L, 4L)) break
+        # 3: completed, 4: error
+        if (job$status == 3L) {
+          query_result_id <- as.character(job$query_result_id)
+          no_result <- job$no_result %||% FALSE
+          break
+        }
 
         Sys.sleep(3L)
       }
@@ -54,7 +59,7 @@ setMethod("dbSendQuery", "RedashConnection",
     new("RedashResult",
         query = statement,
         query_id = query_id,
-        no_result = (job$status == 4L),
+        no_result = no_result,
         query_result_id = as.character(query_result_id),
         conn = conn)
 })

@@ -4,4 +4,5 @@
 #' @docType package
 #' @import DBI
 #' @import methods
+#' @importFrom purrr %||%
 NULL

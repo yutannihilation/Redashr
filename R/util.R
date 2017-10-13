@@ -36,13 +36,22 @@ post_query <- function(base_url, api_key, query, query_id, data_source_id, ...) 
   )
 }
 
+IGNORE_ERRORS <- c(
+  "Query completed but it returned no data."
+)
+
 get_job_status <- function(base_url, api_key, job_id, ...) {
   url <- glue::glue("{base_url}/api/jobs/{job_id}")
   result <- redash_request("GET", url, api_key, ...)
 
-  job_error <- result$job$error
-  if (result$job$state != 4L && !identical(job_error, "")) {
-    stop(glue::glue("Query failed: {job_error}", call. = FALSE))
+  if (result$job$status == 4L) {
+    if (result$job$error %in% IGNORE_ERRORS) {
+      # treat the job as success
+      result$job$status <- 3L
+      result$job$no_result <- TRUE
+    } else {
+      stop(glue::glue("Query failed: {result$job$error}", call. = FALSE))
+    }
   }
 
   result$job
