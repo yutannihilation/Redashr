@@ -53,12 +53,12 @@ setMethod("dbConnect", "RedashDriver",
   # TODO: support more backends
   backend_connection_class <- switch(
     data_source$type,
-    "pg" = "PostgreSQLConnection",
-    "redshift" = "PostgreSQLConnection",
-    "mysql" = "MySQLConnection",
-    "rds_mysql" = "MySQLConnection",
-    "presto" = "PrestoConnection",
-    stop("Not supported backend")
+    "pg"        = prepare_connection_class("RPostgreSQL", "PostgreSQLConnection"),
+    "redshift"  = prepare_connection_class("RPostgreSQL", "PostgreSQLConnection"),
+    "mysql"     = prepare_connection_class("RMySQL", "MySQLConnection"),
+    "rds_mysql" = prepare_connection_class("RMySQL", "MySQLConnection"),
+    "presto"    = prepare_connection_class("RPresto", "PrestoConnection"),
+    prepare_connection_class("DBI", "DBIConnection")
   )
 
   ref_env <- new.env(parent = emptyenv())
@@ -145,3 +145,10 @@ setMethod("dbCommit", "RedashConnection", function(conn, ...) {
 setMethod("dbRollback", "RedashConnection", function(conn, ...) {
   invisible(TRUE)
 })
+
+prepare_connection_class <- function(package, class) {
+  if (require(package, character.only = TRUE)) return(class)
+
+  warning(glue::glue("Couldn't load {package}; falling back to DBI::DBIConnection, where SQL translations are not work well."))
+  "DBIConnection"
+}
