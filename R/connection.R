@@ -122,6 +122,14 @@ setMethod("sqlData", "RedashConnection",
   }
 )
 
+#' @export
+setMethod("dbWriteTable", "RedashConnection",
+  function (conn, name, value, ...) {
+    dbSendStatement(conn, sqlCreateTable(conn, name, value))
+    dbSendStatement(conn, sqlAppendTable(conn, name, value))
+  }
+)
+
 
 #' @export
 setMethod("dbBegin", "RedashConnection", function(conn, ...) {

@@ -15,7 +15,7 @@ setClass("RedashResult",
 
 #' @export
 setMethod("dbSendQuery", "RedashConnection",
-  function(conn, statement, ...) {
+  function(conn, statement, ..., verbose = FALSE) {
     if (!is.null(conn@ref$result)) {
       warning("Closing open result set, pending rows", call. = FALSE)
       dbClearResult(conn@ref$result)
@@ -41,7 +41,7 @@ setMethod("dbSendQuery", "RedashConnection",
       }
 
       while (TRUE) {
-        message(glue::glue("Fetching the result of job {job_id}...\n"))
+        if (verbose) message(glue::glue("Fetching the result of job {job_id}...\n"))
 
         job <- get_job_status(conn@base_url, conn@api_key, job_id)
 
@@ -97,4 +97,10 @@ setMethod("dbHasCompleted", "RedashResult", function(res, ...) {
 setMethod("dbClearResult", "RedashResult", function(res, ...) {
   res@conn@ref$result <- NULL
   TRUE
+})
+
+#' @export
+setMethod("dbGetRowsAffected", "RedashResult", function(res, ...) {
+  # TODO
+  0L
 })
