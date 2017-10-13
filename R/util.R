@@ -1,6 +1,6 @@
 # Utils
 
-redash_request <- function(verb, url, api_key, ...) {
+redash_request <- function(verb, url, api_key, ..., verbose = FALSE) {
   res <- httr::VERB(
     verb = verb,
     url  = url,
@@ -10,18 +10,22 @@ redash_request <- function(verb, url, api_key, ...) {
 
   httr::stop_for_status(res)
 
-  httr::content(res)
+  if (verbose) {
+    httr::content(res)
+  } else {
+    suppressMessages(httr::content(res))
+  }
 }
 
-get_data_sources <- function(base_url, api_key, ...) {
+get_data_sources <- function(base_url, api_key, ..., verbose = FALSE) {
   url <- glue::glue("{base_url}/api/data_sources")
-  result <- redash_request("GET", url, api_key, ...)
+  result <- redash_request("GET", url, api_key, ..., verbose = verbose)
 
   # result contains NULL, which makes bind_rows() to fail
   setNames(result, purrr::map_chr(result, "name"))
 }
 
-post_query <- function(base_url, api_key, query, query_id, data_source_id, ...) {
+post_query <- function(base_url, api_key, query, query_id, data_source_id, ..., verbose = FALSE) {
   url <- glue::glue("{base_url}/api/query_results")
 
   redash_request(
@@ -32,7 +36,8 @@ post_query <- function(base_url, api_key, query, query_id, data_source_id, ...) 
       data_source_id = data_source_id
     ),
     encode = "json",
-    ...
+    ...,
+    verbose = verbose
   )
 }
 
@@ -40,7 +45,7 @@ IGNORE_ERRORS <- c(
   "Query completed but it returned no data."
 )
 
-get_job_status <- function(base_url, api_key, job_id, ...) {
+get_job_status <- function(base_url, api_key, job_id, ..., verbose = FALSE) {
   url <- glue::glue("{base_url}/api/jobs/{job_id}")
   result <- redash_request("GET", url, api_key, ...)
 
@@ -57,7 +62,29 @@ get_job_status <- function(base_url, api_key, job_id, ...) {
   result$job
 }
 
-get_result <- function(base_url, api_key, query_id, query_result_id, ...) {
+get_result <- function(base_url, api_key, query_id, query_result_id, ..., verbose = FALSE) {
   url <- glue::glue("{base_url}/api/queries/{query_id}/results/{query_result_id}.csv")
-  redash_request("GET", url, api_key, ...)
+  redash_request("GET", url, api_key, ..., verbose = verbose)
 }
+
+
+#' @export
+get_supported_data_sources <- function(...) UseMethod("get_supported_data_sources")
+
+#' @export
+get_supported_data_sources.RedashConnection <- function(conn, ..., verbose = FALSE) {
+  get_supported_data_sources(conn@base_url, conn@api_key, ..., verbose = verbose)
+}
+
+#' @export
+get_supported_data_sources.default <- function(base_url, api_key, ..., verbose = FALSE) {
+  url <- glue::glue("{base_url}/api/data_sources/types")
+  res <- redash_request("GET", url, api_key, ..., verbose = verbose)
+  data.frame(
+    name = vapply(res, getElement, name = "name", FUN.VALUE = character(1L)),
+    type = vapply(res, getElement, name = "type", FUN.VALUE = character(1L)),
+    stringsAsFactors = FALSE
+  )
+}
+
+`%||%` <- function (x, y) if (is.null(x)) y else x

@@ -27,7 +27,8 @@ setMethod("dbSendQuery", "RedashConnection",
                          api_key  = conn@api_key,
                          query    = statement,
                          query_id = query_id,
-                         data_source_id = conn@data_source_id)
+                         data_source_id = conn@data_source_id,
+                         verbose  = verbose)
 
     query_result_id <- result$query_result$id
     no_result <- FALSE
@@ -70,11 +71,11 @@ setMethod("dbClearResult", "RedashConnection", function(res, ...) {
 })
 
 #' @export
-setMethod("dbFetch", "RedashResult", function(res, n = -1, ...) {
+setMethod("dbFetch", "RedashResult", function(res, n = -1, ..., verbose = FALSE) {
   if (res@no_result) {
     return(data.frame())
   }
-  get_result(res@conn@base_url, res@conn@api_key, res@query_id, res@query_result_id)
+  get_result(res@conn@base_url, res@conn@api_key, res@query_id, res@query_result_id, verbose = verbose)
 })
 
 #' @export
