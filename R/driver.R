@@ -22,6 +22,5 @@ Redash <- function() {
 
 #' @export
 setMethod("dbGetInfo", "RedashDriver", function(dbObj) {
-  list(driver.version = NULL, client.version = NULL,
-       backend_driver = dbObj@backend_driver)
+  list(driver.version = NULL, client.version = NULL)
 })
