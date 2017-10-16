@@ -18,7 +18,12 @@ defaults: &defaults
      - run:
          name: add dummy data
          command: |
-           env PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres --dbname postgres -c "CREATE DATABASE test;"
+           for i in `seq 1 10`; do
+             if env PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres --dbname postgres -c "CREATE DATABASE test;"; then
+               break
+             fi
+             sleep 1
+           done
            zcat .circleci/pg_dump.sql.gz | env PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres --dbname postgres
 
      ## setup -------------------------------

@@ -1,0 +1,11 @@
+default:
+  connect_args:
+    api_key: L3BcIMTltQoTB83mGtHrcUa8mmeJdMaTuGFA3Bkv
+    base_url: http://10.0.75.1/
+    data_source_name: test
+
+circleci:
+  connect_args:
+    api_key: L3BcIMTltQoTB83mGtHrcUa8mmeJdMaTuGFA3Bkv
+    base_url: http://127.0.0.1:5000/
+    data_source_name: test
