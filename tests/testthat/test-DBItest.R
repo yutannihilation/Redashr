@@ -18,4 +18,9 @@ DBItest::make_context(
   tweaks = tweaks
 )
 DBItest::test_getting_started()
-DBItest::test_driver()
+DBItest::test_driver(
+  skip = c(
+    # Redash cannot determine the type of backend before connecting
+    "data_type_driver"
+  )
+)
