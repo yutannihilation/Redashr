@@ -1,3 +1,6 @@
+# get connect_args
+if (identical(Sys.getenv("CIRCLECI"), "true")) Sys.setenv(R_CONFIG_ACTIVE = "circleci")
+
 tweaks <- DBItest::tweaks(
   # Though "RRedash" is possible, I chose "Redash" because this seems more natural.
   constructor_name = "Redash",
@@ -9,6 +12,10 @@ tweaks <- DBItest::tweaks(
   omit_blob_tests = TRUE
 )
 
-DBItest::make_context(Redash(), connect_args = NULL, tweaks = tweaks)
+DBItest::make_context(
+  Redash(),
+  connect_args = config::get("connect_args"),
+  tweaks = tweaks
+)
 DBItest::test_getting_started()
 DBItest::test_driver()

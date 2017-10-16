@@ -16,6 +16,7 @@ Imports:
   RPostgreSQL
 Suggests:
   DBItest,
+  config,
   testthat
 Encoding: UTF-8
 LazyData: true
